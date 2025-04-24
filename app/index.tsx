@@ -1,5 +1,5 @@
 import React from 'react';
-import { WelcomeScreen } from './welcomeScreen'; // Named import
+import { WelcomeScreen } from './(tabs)/welcomeScreen'; // Adjust the path if necessary
 
 export default function Index() {
   return <WelcomeScreen />;
