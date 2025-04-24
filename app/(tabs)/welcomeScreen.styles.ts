@@ -7,7 +7,7 @@ const COLORS = {
     primary: '#6B4EAE', // Deep purple
     secondary: '#8A6FD0', // Medium purple
     accent: '#A594E0', // Light purple
-    background: '#F5F3FF', // Very light purple
+    background: '#e9d6f7', // Very light purple
     text: '#2D1B69', // Dark purple
     white: '#FFFFFF',
     gray: '#6B7280',
@@ -47,23 +47,13 @@ const styles = StyleSheet.create({
       shadowRadius: 6,
       elevation: 5,
     },
-    skipButton: {
-      position: 'absolute',
-      top: Platform.OS === 'ios' ? 50 : 20,
-      right: 20,
-      zIndex: 1,
-    },
-    skipText: {
-      color: COLORS.primary,
-      fontSize: 16,
-      fontWeight: '500',
-    },
+  
     logoContainer: {
       flex: 1,
       justifyContent: 'center',
       alignItems: 'center',
       position: 'absolute',
-      top: 2,
+      top: 3,
       left: 0,
       right: 0,
       bottom: height * 0.4,

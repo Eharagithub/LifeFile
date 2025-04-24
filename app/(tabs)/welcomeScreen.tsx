@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import {View, Text, Dimensions, TouchableOpacity, Image, ScrollView, Platform,} from 'react-native';
+import React, { useEffect, useState, useRef } from 'react';
+import {View, Text, StyleSheet, Dimensions, TouchableOpacity, Image, ScrollView, Platform,} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Animated, {  useSharedValue, withSpring, useAnimatedStyle, withTiming, interpolate,} from 'react-native-reanimated';
 import { useRouter } from 'expo-router';
@@ -48,7 +48,9 @@ const walkthroughData: WalkthroughItem[] = [
   },
 ];
 
-export function WelcomeScreen() {
+
+// Change from export function to export default function
+export default function WelcomeScreen() {
   const router = useRouter();
   const [showFullContent, setShowFullContent] = useState(false);
   const [currentSlide, setCurrentSlide] = useState(0);

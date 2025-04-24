@@ -1,112 +1,109 @@
-import { StatusBar } from "expo-status-bar"; /*control the appearance of the status bar on the device.*/
-import { Feather } from "@expo/vector-icons"; /*access to Feather icons for use in the UI.*/
-import {Image,SafeAreaView,ScrollView,Text,TextInput,TouchableOpacity,View,} from "react-native";
-import React from "react"; /*The core library for building React components.*/
-import styles from "./login.styles"; /*importing styles from the login.styles file.*/
+import { StatusBar } from "expo-status-bar";
+import { Feather } from "@expo/vector-icons";
+import React, { useState } from "react";
+import {
+  Image,
+  SafeAreaView,
+  ScrollView,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import styles from "./login.styles";
 
-export default function App() {
-  const [email, setEmail] = React.useState<string>("");
-  const [password, setPassword] = React.useState<string>("");
-
-  const [passwordIsVisible, setPasswordIsVisible] =
-    React.useState<boolean>(false);
-
+export default function LoginScreen() {
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [passwordIsVisible, setPasswordIsVisible] = useState<boolean>(false);
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar style="auto" />
+       
       
       <ScrollView
-        contentContainerStyle={{
-          flex: 1,
-          alignItems: "center",
-          justifyContent: "center",
-        }}
+        contentContainerStyle={styles.scrollContent}
+        keyboardShouldPersistTaps="handled"
       >
-        <View style={styles.content}>
-          <Text style={styles.title}>Login</Text>
-          
-          {/* Entering email and password */}
-          <View style={styles.inputContainer}>
-            <View style={styles.icon}>
-              <Feather name="mail" size={22} color="#7C808D" />
-            </View>
-            <TextInput
-              style={styles.input}
-              placeholder="Email ID"
-              placeholderTextColor="#7C808D"
-              selectionColor="#3662AA"
-              onChangeText={setEmail}
-              value={email}
-            />
-          </View>
+        <TouchableOpacity style={styles.backButton}>
+          <Feather name="arrow-left" size={30} color="#222" />
+        </TouchableOpacity>
+        <Text style={styles.title}>Login</Text>
 
-          <View style={styles.inputContainer}>
-            <View style={styles.icon}>
-              <Feather name="lock" size={22} color="#7C808D" />
-            </View>
-            <TextInput
-              style={styles.input}
-              placeholder="Password"
-              secureTextEntry={!passwordIsVisible}
-              placeholderTextColor="#7C808D"
-              selectionColor="#3662AA"
-              onChangeText={setPassword}
-              value={password}
-            />
-            <TouchableOpacity
-              style={styles.passwordVisibleButton}
-              onPress={() => setPasswordIsVisible(!passwordIsVisible)}
-            >
-              <Feather
-                name={passwordIsVisible ? "eye" : "eye-off"}
-                size={20}
-                color="#7C808D"
-              />
-            </TouchableOpacity>
-          </View>
-
-          {/* Forgot password */}
-          <TouchableOpacity style={styles.forgotPasswordButton}>
-            <Text style={styles.forgotPasswordButtonText}>
-              Forgot password?
-            </Text>
-          </TouchableOpacity>
-
-          {/* Login button */}
-          <TouchableOpacity style={styles.loginButton}>
-            <Text style={styles.loginButtonText}>Login</Text>
-          </TouchableOpacity>
-
-          <View style={styles.orContainer}>
-            <View style={styles.orLine} />
-            <Text style={styles.orText}>OR</Text>
-            <View style={styles.orLine} />
-          </View>
-
-          {/* Login with Google */}
-          <TouchableOpacity style={styles.googleButton}>
-            <Image
-              style={styles.googleLogo}
-              source={require("../../assets/images/google-logo.jpg")}
-            />
-            <Text style={styles.googleButtonText}>Login with Google</Text>
-          </TouchableOpacity>
-
-          {/* Register */}
-          <TouchableOpacity style={styles.registerButton}>
-            <Text style={styles.registerButtonText}>
-              Not have an account yet?{" "}
-              <Text style={styles.registerButtonTextHighlight}>
-                Register now!
-              </Text>
-            </Text>
-          </TouchableOpacity>
-
-
+        {/* Email Input */}
+        <View style={styles.inputContainer}>
+          <Feather name="mail" size={20} color="#7C808D" style={styles.inputIcon} />
+          <TextInput
+            style={styles.input}
+            placeholder="Enter your email"
+            placeholderTextColor="#7C808D"
+            selectionColor="#8d3dad"
+            onChangeText={setEmail}
+            value={email}
+            autoCapitalize="none"
+            keyboardType="email-address"
+          />
         </View>
+
+        {/* Password Input */}
+        <View style={styles.inputContainer}>
+          <Feather name="lock" size={20} color="#7C808D" style={styles.inputIcon} />
+          <TextInput
+            style={styles.input}
+            placeholder="Enter your password"
+            placeholderTextColor="#7C808D"
+            secureTextEntry={!passwordIsVisible}
+            selectionColor="#8d3dad"
+            onChangeText={setPassword}
+            value={password}
+            autoCapitalize="none"
+          />
+          <TouchableOpacity
+            style={styles.passwordVisibleButton}
+            onPress={() => setPasswordIsVisible(!passwordIsVisible)}
+          >
+            <Feather
+              name={passwordIsVisible ? "eye" : "eye-off"}
+              size={20}
+              color="#7C808D"
+            />
+          </TouchableOpacity>
+        </View>
+
+        {/* Forgot password */}
+        <TouchableOpacity style={styles.forgotPasswordButton}>
+          <Text style={styles.forgotPasswordButtonText}>
+            Forgot password?
+          </Text>
+        </TouchableOpacity>
+
+        {/* Login button */}
+        <TouchableOpacity style={styles.loginButton}>
+          <Text style={styles.loginButtonText}>Login</Text>
+        </TouchableOpacity>
+
+        <View style={styles.signupRow}>
+          <Text style={styles.signupText}>Don’t have an account? </Text>
+          <TouchableOpacity>
+            <Text style={styles.signupLink}>Sign up</Text>
+          </TouchableOpacity>
+        </View>
+
+        <View style={styles.orContainer}>
+          <View style={styles.orLine} />
+          <Text style={styles.orText}>OR</Text>
+          <View style={styles.orLine} />
+        </View>
+
+        {/* Login with Google */}
+        <TouchableOpacity style={styles.googleButton}>
+          <Image
+            style={styles.googleLogo}
+            source={require("../../assets/images/google-logo.jpg")}
+          />
+          <Text style={styles.googleButtonText}>Sign in with Google</Text>
+        </TouchableOpacity>
       </ScrollView>
     </SafeAreaView>
   );
 }
-

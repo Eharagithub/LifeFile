@@ -1,111 +1,118 @@
 import { StyleSheet } from "react-native";
 
-const styles = StyleSheet.create({
+export default StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
+    padding:50,
   },
-  content: {
-    paddingHorizontal: 30,
+  
+  scrollContent: {
+    paddingHorizontal: 24,
+    paddingTop: 36,
+    alignItems: "stretch",
+  },
+  backButton: {
+    alignSelf: "flex-start",
+    marginBottom: 20,
   },
   title: {
-    fontSize: 30,
+    fontSize: 22,
     fontWeight: "bold",
-    marginBottom: 40,
+    color: "#222",
+    alignSelf: "center",
+    marginBottom: 32,
   },
   inputContainer: {
     flexDirection: "row",
-    width: "100%",
     alignItems: "center",
-    justifyContent: "center",
-    marginBottom: 20,
-    position: "relative",
+    backgroundColor: "#f5f7fa",
+    borderRadius: 8,
+    paddingHorizontal: 12,
+    marginBottom: 16,
+    height: 48,
   },
-  icon: {
-    marginRight: 15,
+  inputIcon: {
+    marginRight: 8,
   },
   input: {
-    borderBottomWidth: 1.5,
     flex: 1,
-    paddingBottom: 10,
-    borderBottomColor: "#eee",
     fontSize: 16,
+    color: "#222",
   },
   passwordVisibleButton: {
-    position: "absolute",
-    right: 0,
+    padding: 4,
   },
   forgotPasswordButton: {
     alignSelf: "flex-end",
+    marginBottom: 24,
   },
   forgotPasswordButtonText: {
-    color: "#3662AA",
-    fontSize: 16,
+    color: "#8d3dad",
+    fontSize: 14,
     fontWeight: "500",
   },
   loginButton: {
-    backgroundColor: "#3662AA",
-    padding: 14,
-    borderRadius: 10,
-    marginTop: 20,
+    backgroundColor: "#8d3dad",
+    borderRadius: 24,
+    height: 48,
+    alignItems: "center",
+    justifyContent: "center",
+    marginBottom: 16,
   },
   loginButtonText: {
     color: "#fff",
-    textAlign: "center",
+    fontSize: 18,
     fontWeight: "bold",
-    fontSize: 16,
+  },
+  signupRow: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: 24,
+  },
+  signupText: {
+    color: "#888",
+    fontSize: 14,
+  },
+  signupLink: {
+    color: "#8d3dad",
+    fontWeight: "bold",
+    fontSize: 14,
   },
   orContainer: {
     flexDirection: "row",
     alignItems: "center",
-    marginTop: 20,
-    marginBottom: 20,
+    marginBottom: 24,
   },
   orLine: {
-    height: 1,
-    backgroundColor: "#eee",
     flex: 1,
+    height: 1,
+    backgroundColor: "#e0e0e0",
   },
   orText: {
-    color: "#7C808D",
-    marginRight: 10,
-    marginLeft: 10,
+    marginHorizontal: 8,
+    color: "#888",
+    fontWeight: "bold",
     fontSize: 14,
   },
   googleButton: {
-    backgroundColor: "#F2F6F2",
-    padding: 14,
-    borderRadius: 10,
     flexDirection: "row",
     alignItems: "center",
+    backgroundColor: "#f5f7fa",
+    borderRadius: 8,
+    paddingVertical: 12,
     justifyContent: "center",
-    position: "relative",
-  },
-  googleButtonText: {
-    color: "#4E5867",
-    fontSize: 16,
-    fontWeight: "500",
-    textAlign: "center",
+    marginBottom: 24,
   },
   googleLogo: {
-    width: 20.03,
-    height: 20.44,
-    position: "absolute",
-    left: 14,
+    width: 22,
+    height: 22,
+    marginRight: 10,
   },
-  registerButton: {
-    alignSelf: "center",
-    marginTop: 40,
-  },
-  registerButtonText: {
+  googleButtonText: {
     fontSize: 16,
-    color: "#7C808D",
-  },
-  registerButtonTextHighlight: {
-    fontSize: 16,
-    color: "#3662AA",
-    fontWeight: "500",
+    color: "#222",
+    fontWeight: "bold",
   },
 });
-
-export default styles;
