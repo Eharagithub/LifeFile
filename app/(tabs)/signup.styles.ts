@@ -1,130 +1,280 @@
+
+
 import { StyleSheet } from 'react-native';
-const PRIMARY_COLOR = '#8d3dad';
-const PRIMARY_LIGHT = '#d1b3e0';
-const PRIMARY_DARK = '#6b2264';
-const ACCENT_COLOR = '#4A9F8F';
-//#8E2E84
 
 export default StyleSheet.create({
-  container: {
+  safe: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#f7f7f7',
   },
-  scrollContainer: {
-    paddingHorizontal: 24,
-    paddingTop: 24,
+  container: {
+    backgroundColor: '#fff',
+    margin: 16,
+    borderRadius: 12,
+    padding: 20,
+    alignItems: 'stretch',
+    minHeight: 600,
     flexGrow: 1,
   },
-  backButton: {
-    alignSelf: 'flex-start',
-    marginBottom: 12,
+  heartIcon: {
+    width: 280,
+    height: 280,
+    marginBottom: -65,
+    alignItems: 'center',
   },
-  title: {
-    fontSize: 20,
-    fontWeight: '700',
-    marginBottom: 28,
-    alignSelf: 'center',
-    color: '#000',
+  logoContainer: {
+    width: '100%',
+    alignItems: 'center', 
+    justifyContent: 'center', 
+    marginBottom: -15,
   },
-  inputContainer: {
+
+  stepsRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#f5f7fa',
-    borderColor: '#d8c8e0',
-    //borderWidth: 1,
+    justifyContent: 'center',
+    marginBottom: 2,
+    marginTop: -15,
+  },
+  stepCircleActive: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: '#a97bc7',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  stepCircle: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: '#e9e7ea',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  stepNum: {
+    color: '#fff',
+    fontWeight: '700',
+    fontSize: 17,
+  },
+  stepNumInactive: {
+    color: '#bdbdbd',
+    fontWeight: '700',
+    fontSize: 17,
+  },
+  stepLine: {
+    width: 90,
+    height: 2,
+    backgroundColor: '#e9e7ea',
+    marginHorizontal: 2,
+  },
+  stepsLabelRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 18,
+    marginTop: 2,
+    marginHorizontal: 12,
+  },
+  stepLabelActive: {
+    color: '#7d4c9e',
+    fontWeight: '700',
+    fontSize: 13,
+    width: 70,
+    textAlign: 'center',
+  },
+  stepLabel: {
+    color: '#bdbdbd',
+    fontWeight: '700',
+    fontSize: 13,
+    width: 70,
+    textAlign: 'center',
+  },
+
+  sectionTitleRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 8,
+    marginTop: 2,
+  },
+  sectionTitle: {
+    fontWeight: '700',
+    fontSize: 15,
+    color: '#222',
+    marginLeft: 5,
+  },
+
+  sectionDivider: {
+    height:3,
+    backgroundColor: '#eee',
+    marginBottom: 12,
+    marginTop: 5,
+  },
+  inputLabel: {
+    fontSize: 13,
+    color: '#222',
+    fontWeight: '600',
+    marginBottom: 4,
+    marginLeft: 2,
+  },
+  req: {
+    color: '#e24d4d',
+    fontWeight: 'bold',
+    fontSize: 13,
+  },
+  inputWrapper: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#f6f9f6',
+    borderColor: '#e4e4e4',
+    borderWidth: 1,
     borderRadius: 8,
-    marginBottom: 16,
-    paddingHorizontal: 12,
-    height: 52,
+    marginBottom: 14,
+    paddingHorizontal: 10,
+    height: 44,
   },
   inputIcon: {
     marginRight: 8,
   },
   input: {
     flex: 1,
-    fontSize: 16,
+    fontSize: 15,
     color: '#222',
-    height: 48,
+    height: 44,
     paddingVertical: 0,
     backgroundColor: 'transparent',
   },
-  eyeIcon: {
-    padding: 4,
-  },
-  checkboxContainer: {
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-    marginBottom: 28,
-    marginTop: 2,
-  },
-  checkbox: {
-    marginRight: 8,
-    marginTop: 2,
-  },
-  checkboxBox: {
-    width: 22,
-    height: 22,
-    borderRadius: 4,
-    borderWidth: 1.5,
-    borderColor: '#bdbdbd',
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#fff',
-  },
-  checkboxBoxChecked: {
-    borderColor: PRIMARY_COLOR,
-    backgroundColor: '#f0e5f0',
-  },
-  checkboxText: {
+  dropdown: {
     flex: 1,
-    fontSize: 13,
+    fontSize: 15,
     color: '#222',
-    lineHeight: 18,
-    flexWrap: 'wrap',
-    marginTop: 1,
+    height: 44,
+    backgroundColor: 'transparent',
   },
-  link: {
-    color: '#7d4c9e',
-    textDecorationLine: 'underline',
-    fontWeight: '500',
+  buttonRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 40,
+    marginBottom: 12,
+    gap: 16,
   },
-  signUpButton: {
-    backgroundColor: PRIMARY_COLOR,
-    paddingVertical: 16,
-    borderRadius: 30,
+  exitBtn: {
+    flex: 1,
+    backgroundColor: '#e9e7ea',
+    borderRadius: 22,
+    paddingVertical: 12,
     alignItems: 'center',
-    marginBottom: 18,
-    marginTop: 24,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,  
+    marginRight: 8,
   },
-  signUpButtonDisabled: {
-    backgroundColor: PRIMARY_LIGHT,
+  exitBtnText: {
+    color: '#7d4c9e',
+    fontWeight: 'bold',
+    fontSize: 16,
   },
-  signUpButtonText: {
+  nextBtn: {
+    flex: 1,
+    backgroundColor: '#7d4c9e',
+    borderRadius: 22,
+    paddingVertical: 12,
+    alignItems: 'center',
+    marginLeft: 8,
+  },
+  nextBtnText: {
     color: '#fff',
     fontWeight: 'bold',
-    fontSize: 17,
-    letterSpacing: 0.5,
+    fontSize: 16,
   },
-  footer: {
+  previousBtn: {
+    flex: 1,
+    backgroundColor: '#e9e7ea',
+    borderRadius: 22,
+    paddingVertical: 12,
+    alignItems: 'center',
+    marginRight: 8,
+  },
+  previousBtnText: {
+    color: '#7d4c9e',
+    fontWeight: 'bold',
+    fontSize: 16,
+  },
+
+  loginRow: {
     flexDirection: 'row',
     justifyContent: 'center',
-    marginTop: 2,
+    marginTop: 10,
   },
-  footerText: {
+  loginText: {
     color: '#222',
     fontSize: 14,
-    fontWeight: '400',
   },
-  
-  footerLink: {
+  loginLink: {
     color: '#7d4c9e',
     fontWeight: 'bold',
     fontSize: 14,
     marginLeft: 2,
+  },
+  profileRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 8,
+    marginBottom: 14,
+  },
+  profileAvatar: {
+    width: 70,
+    height: 70,
+    borderRadius: 35,
+    backgroundColor: '#f6f6f6',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: 18,
+    borderWidth: 1,
+    borderColor: '#e4e4e4',
+  },
+  profileIcon: {
+    color: '#bdbdbd',
+  },
+  profileTextCol: {
+    flex: 1,
+    justifyContent: 'center',
+  },
+  profileLabel: {
+    fontSize: 13,
+    color: '#222',
+    fontWeight: '600',
+    marginBottom: 2,
+  },
+  fileRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  chooseFileBtn: {
+    backgroundColor: '#e9e7ea',
+    borderRadius: 4,
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    marginRight: 8,
+  },
+  chooseFileText: {
+    color: '#222',
+    fontWeight: 'bold',
+    fontSize: 13,
+  },
+  fileName: {
+    color: '#bdbdbd',
+    fontSize: 13,
+  },
+
+  calendarInput: {
+    flex: 1,
+    fontSize: 15,
+    color: "#222",
+    height: 44,
+    paddingVertical: 0,
+    backgroundColor: 'transparent',
+  },
+  datePickerButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    width: '100%',
   },
 });

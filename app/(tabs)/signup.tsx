@@ -1,108 +1,128 @@
-import React, { useState } from "react";
-import { SafeAreaView, Text, TextInput, TouchableOpacity, View, ScrollView,} from 'react-native';
-import { useRouter } from 'expo-router';
-import { Feather, MaterialIcons } from '@expo/vector-icons';
-import styles from './signup.styles';
 
-export default function SignUp() {
+import React, { useState } from 'react';
+import { View, Text, TextInput, TouchableOpacity, SafeAreaView, ScrollView, Image } from 'react-native';
+import { Feather, MaterialCommunityIcons } from '@expo/vector-icons';
+import styles from './signup.styles';
+import { useRouter } from 'expo-router';
+
+export default function SignUp({ navigation }: any) {
   const router = useRouter();
-  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirm, setConfirm] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const [agree, setAgree] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
 
-  const handleSignUp = () => {
-    // Your sign up logic here
-    console.log('Sign up with:', { name, email, password });
-  };
-
-  const handleGoToLogin = () => {
+  const handleLogin = () => {
     router.push('/login');
   };
+  const createProfile = () => {
+    router.push('/createProfile');
+  };
+
 
   return (
-    <SafeAreaView style={styles.container}>
-      <ScrollView contentContainerStyle={styles.scrollContainer}>
-        <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
-          <Feather name="arrow-left" size={24} color="#000" />
-        </TouchableOpacity>
-
-        <Text style={styles.title}>Sign Up</Text>
-
-        {/* Name Input */}
-        <View style={styles.inputContainer}>
-          <Feather name="user" size={20} color="#bdbdbd" style={styles.inputIcon} />
-          <TextInput
-            placeholder="Enter your name"
-            value={name}
-            onChangeText={setName}
-            style={styles.input}
-            placeholderTextColor="#bdbdbd"
-          />
+    <SafeAreaView style={styles.safe}>
+      <ScrollView contentContainerStyle={styles.container}>
+        {/* Logo and Steps */}
+         <View style={styles.logoContainer}>
+            <Image source={require('../../assets/images/logo.png')}
+                   style={styles.heartIcon}
+                   resizeMode="contain"/>
         </View>
 
-        {/* Email Input */}
-        <View style={styles.inputContainer}>
-          <Feather name="mail" size={20} color="#bdbdbd" style={styles.inputIcon} />
+        <View style={styles.stepsRow}>
+          <View style={styles.stepCircleActive}><Text style={styles.stepNum}>1</Text></View>
+          <View style={styles.stepLine} />
+          <View style={styles.stepCircle}><Text style={styles.stepNumInactive}>2</Text></View>
+          <View style={styles.stepLine} />
+          <View style={styles.stepCircle}><Text style={styles.stepNumInactive}>3</Text></View>
+        </View>
+        <View style={styles.stepsLabelRow}>
+          <Text style={styles.stepLabelActive}>Account</Text>
+          <Text style={styles.stepLabel}>Personal</Text>
+          <Text style={styles.stepLabel}>Health</Text>
+        </View>
+
+        {/* Section Title */}
+        <View style={styles.sectionTitleRow}>
+          <MaterialCommunityIcons name="checkbox-blank-outline" size={18} color="#222" />
+          <Text style={styles.sectionTitle}> Create your Account</Text>
+        </View>
+
+        <View style={styles.sectionDivider} />
+        {/* Email */}
+        <Text style={styles.inputLabel}>
+          Email (Will be the User Name)<Text style={styles.req}>*</Text>
+        </Text>
+        <View style={styles.inputWrapper}>
+          <Feather name="mail" size={18} color="#bdbdbd" style={styles.inputIcon} />
           <TextInput
+            style={styles.input}
             placeholder="Enter your email"
+            placeholderTextColor="#bdbdbd"
             value={email}
+            autoCapitalize="none"
             onChangeText={setEmail}
             keyboardType="email-address"
-            style={styles.input}
-            placeholderTextColor="#bdbdbd"
           />
         </View>
 
-        {/* Password Input */}
-        <View style={styles.inputContainer}>
-          <Feather name="lock" size={20} color="#bdbdbd" style={styles.inputIcon} />
+        {/* Password */}
+        <Text style={styles.inputLabel}>
+          Password <Text style={styles.req}>*</Text>
+        </Text>
+        <View style={styles.inputWrapper}>
+          <Feather name="lock" size={18} color="#bdbdbd" style={styles.inputIcon} />
           <TextInput
+            style={styles.input}
             placeholder="Enter your password"
+            placeholderTextColor="#bdbdbd"
             value={password}
             onChangeText={setPassword}
             secureTextEntry={!showPassword}
-            style={styles.input}
-            placeholderTextColor="#bdbdbd"
+            autoCapitalize="none"
           />
-          <TouchableOpacity onPress={() => setShowPassword((prev) => !prev)} style={styles.eyeIcon}>
-            <MaterialIcons
-              name={showPassword ? "visibility" : "visibility-off"}
-              size={20}
-              color="#bdbdbd"
-            />
+          <TouchableOpacity onPress={() => setShowPassword((v) => !v)}>
+            <Feather name={showPassword ? "eye" : "eye-off"} size={18} color="#bdbdbd" />
           </TouchableOpacity>
         </View>
 
-        {/* Checkbox and Terms */}
-        <View style={styles.checkboxContainer}>
-          <TouchableOpacity onPress={() => setAgree((prev) => !prev)} style={styles.checkbox}>
-            <View style={[styles.checkboxBox, agree && styles.checkboxBoxChecked]}>
-              {agree && <Feather name="check" size={16} color="#7d4c9e" />}
-            </View>
+        {/* Confirm Password */}
+        <Text style={styles.inputLabel}>
+          Conform Password<Text style={styles.req}>*</Text>
+        </Text>
+        <View style={styles.inputWrapper}>
+          <Feather name="lock" size={18} color="#bdbdbd" style={styles.inputIcon} />
+          <TextInput
+            style={styles.input}
+            placeholder="Re-enter your password"
+            placeholderTextColor="#bdbdbd"
+            value={confirm}
+            onChangeText={setConfirm}
+            secureTextEntry={!showConfirm}
+            autoCapitalize="none"
+          />
+          <TouchableOpacity onPress={() => setShowConfirm((v) => !v)}>
+            <Feather name={showConfirm ? "eye" : "eye-off"} size={18} color="#bdbdbd" />
           </TouchableOpacity>
-          <Text style={styles.checkboxText}>
-            I agree to the healthcare{' '}
-            <Text style={styles.link}>Terms of Service</Text> and{' '}
-            <Text style={styles.link}>Privacy Policy</Text>
-          </Text>
         </View>
 
-        {/* Sign Up Button */}
-        <TouchableOpacity
-          onPress={handleSignUp}
-          style={[styles.signUpButton, !agree && styles.signUpButtonDisabled]}
-          disabled={!agree}
-        >
-          <Text style={styles.signUpButtonText}>Sign Up</Text>
-        </TouchableOpacity>
+        {/* Buttons */}
+        <View style={styles.buttonRow}>
+          <TouchableOpacity style={styles.exitBtn} onPress={handleLogin}>
+            <Text style={styles.exitBtnText}>Exit</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.nextBtn} onPress={createProfile}>
+            <Text style={styles.nextBtnText}>Next</Text>
+          </TouchableOpacity>
+        </View>
 
-        {/* Already have account section */}
-        <View style={styles.footer}>
-          <Text style={styles.footerText}>Allready have an account? </Text>
-          <TouchableOpacity onPress={handleGoToLogin}>
-            <Text style={styles.footerLink}>Login</Text>
+        {/* Login Link */}
+        <View style={styles.loginRow}>
+          <Text style={styles.loginText}>Already have an account? </Text>
+          <TouchableOpacity onPress={handleLogin}>
+            <Text style={styles.loginLink}>Login</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>

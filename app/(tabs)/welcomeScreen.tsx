@@ -10,15 +10,6 @@ import  styles  from './welcomeScreen.styles';
 
 const { width, height } = Dimensions.get('window');
 
-// const COLORS = {
-//   primary: '#6B4EAE', // Deep purple
-//   secondary: '#8A6FD0', // Medium purple
-//   accent: '#A594E0', // Light purple
-//   background: '#F5F3FF', // Very light purple
-//   text: '#2D1B69', // Dark purple
-//   white: '#FFFFFF',
-//   gray: '#6B7280',
-// };
 
 interface WalkthroughItem {
   id: string;
