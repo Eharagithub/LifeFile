@@ -1,21 +1,19 @@
 import { StatusBar } from "expo-status-bar";
 import { Feather } from "@expo/vector-icons";
 import React, { useState } from "react";
-import {
-  Image,
-  SafeAreaView,
-  ScrollView,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import {Image,SafeAreaView,ScrollView,Text,TextInput,TouchableOpacity,View,} from "react-native";
 import styles from "./login.styles";
+import { useRouter } from 'expo-router';
 
 export default function LoginScreen() {
+  const router = useRouter();
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [passwordIsVisible, setPasswordIsVisible] = useState<boolean>(false);
+
+  const handleSignup = () => {
+    router.push('/signup');
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -84,7 +82,7 @@ export default function LoginScreen() {
 
         <View style={styles.signupRow}>
           <Text style={styles.signupText}>Don’t have an account? </Text>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={handleSignup}>
             <Text style={styles.signupLink}>Sign up</Text>
           </TouchableOpacity>
         </View>
