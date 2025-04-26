@@ -25,6 +25,9 @@ export default function CreateProfile({ navigation }: any) {
   const handleSignup = () => {
     router.push('/signup');
   };
+  const HealthProfile= () => {
+    router.push('/healthProfile');
+  };
 
 
    // Handle date change
@@ -130,7 +133,7 @@ export default function CreateProfile({ navigation }: any) {
         <View style={styles.inputWrapper}>
           <Picker
             selectedValue={gender}
-            style={styles.dropdown}
+            style={[styles.dropdown, !gender ? {color: '#bdbdbd'} : {color: '#222'}]}
             onValueChange={(itemValue) => setGender(itemValue)}
             dropdownIconColor="#bdbdbd"
           >
@@ -187,7 +190,7 @@ export default function CreateProfile({ navigation }: any) {
           <TouchableOpacity style={styles.previousBtn} onPress={handleSignup}>
             <Text style={styles.previousBtnText} >Previous</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.nextBtn}>
+          <TouchableOpacity style={styles.nextBtn} onPress={HealthProfile}>
             <Text style={styles.nextBtnText}>Next</Text>
           </TouchableOpacity>
         </View>

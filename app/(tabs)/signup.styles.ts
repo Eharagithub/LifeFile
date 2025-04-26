@@ -183,6 +183,8 @@ export default StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 16,
   },
+
+  //createProfile.tsx
   previousBtn: {
     flex: 1,
     backgroundColor: '#e9e7ea',
@@ -276,5 +278,109 @@ export default StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     width: '100%',
+  },
+
+  //healthProfile.tsx
+
+  row: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: 14,
+  },
+  textarea: {
+    backgroundColor: '#f6f9f6',
+    borderColor: '#e4e4e4',
+    borderWidth: 1,
+    borderRadius: 8,
+    fontSize: 15,
+    color: '#222',
+    minHeight: 60,
+    paddingHorizontal: 10,
+    paddingTop: 10,
+    marginBottom: 14,
+    textAlignVertical: 'top',
+  },
+  radioRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 14,
+    marginTop: 2,
+  },
+  radioBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginRight: 24,
+  },
+  radioOuter: {
+    width: 18,
+    height: 18,
+    borderRadius: 9,
+    borderWidth: 2,
+    borderColor: '#bdbdbd',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: 6,
+  },
+  radioOuterActive: {
+    borderColor: '#7d4c9e',
+  },
+  radioInner: {
+    width: 10,
+    height: 10,
+    borderRadius: 5,
+    backgroundColor: '#7d4c9e',
+  },
+  radioLabel: {
+    fontSize: 14,
+    color: '#222',
+    fontWeight: '500',
+  },
+  checkboxContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 28,
+  },
+  checkbox: {
+    marginRight: 8,
+  },
+  checkboxBox: {
+    width: 20,
+    height: 20,
+    borderRadius: 4,
+    borderWidth: 1.5,
+    borderColor: '#bdbdbd',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#fff',
+  },
+  checkboxBoxChecked: {
+    borderColor: '#7d4c9e',
+    backgroundColor: '#f6f9f6',
+  },
+  checkboxText: {
+    flex: 1,
+    fontSize: 13,
+    color: '#222',
+    flexWrap: 'wrap',
+  },
+  link: {
+    color: '#7d4c9e',
+    textDecorationLine: 'underline',
+  },
+  signUpButton: {
+    flex: 1,
+    backgroundColor: '#7d4c9e',
+    borderRadius: 22,
+    paddingVertical: 12,
+    alignItems: 'center',
+    marginLeft: 8,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  signUpButtonDisabled: {
+    backgroundColor: '#d1b3e0',
   },
 });
