@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
     },
   
     logoContainer: {
-      flex: 1,
+      flex: 2,
       justifyContent: 'center',
       alignItems: 'center',
       position: 'absolute',

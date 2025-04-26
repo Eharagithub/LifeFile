@@ -1,25 +1,78 @@
-
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, SafeAreaView, ScrollView, Image } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, SafeAreaView, ScrollView, Image, Alert, ActivityIndicator } from 'react-native';
 import { Feather, MaterialCommunityIcons } from '@expo/vector-icons';
 import styles from './signup.styles';
 import { useRouter } from 'expo-router';
+import { auth } from '../../config/firebaseConfig';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
 
-export default function SignUp({ navigation }: any) {
+export default function SignUp() {
   const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirm, setConfirm] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  // Add state to store the user ID
+  const [userId, setUserId] = useState('');
 
   const handleLogin = () => {
     router.push('/login');
   };
-  const createProfile = () => {
-    router.push('/createProfile');
-  };
 
+  const createProfile = (uid: string) => {
+    // Fixed navigation path - use the full path including the tabs directory structure
+    router.push({
+      pathname: './createProfile',
+      params: { userId: uid }
+    });
+  };
+ 
+
+  const handleSignUp = async () => {
+    // Input validation
+    if (!email || !password || !confirm) {
+      Alert.alert('Error', 'Please fill in all required fields');
+      return;
+    }
+
+    if (password !== confirm) {
+      Alert.alert('Error', 'Passwords do not match');
+      return;
+    }
+
+    if (password.length < 6) {
+      Alert.alert('Error', 'Password must be at least 6 characters');
+      return;
+    }
+
+    // Email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      Alert.alert('Error', 'Please enter a valid email address');
+      return;
+    }
+
+    try {
+      setIsLoading(true);
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const uid = userCredential.user.uid;
+      console.log('User created with ID:', uid);
+      
+      // Set user ID and navigate to the next step
+      setUserId(uid);
+      createProfile(uid);
+    } catch (error: any) {
+      console.error('Signup error:', error);
+      Alert.alert(
+        'Signup Failed',
+        error.message || 'Failed to create account. Please try again.'
+      );
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <SafeAreaView style={styles.safe}>
@@ -90,7 +143,7 @@ export default function SignUp({ navigation }: any) {
 
         {/* Confirm Password */}
         <Text style={styles.inputLabel}>
-          Conform Password<Text style={styles.req}>*</Text>
+          Confirm Password<Text style={styles.req}>*</Text>
         </Text>
         <View style={styles.inputWrapper}>
           <Feather name="lock" size={18} color="#bdbdbd" style={styles.inputIcon} />
@@ -113,8 +166,16 @@ export default function SignUp({ navigation }: any) {
           <TouchableOpacity style={styles.exitBtn} onPress={handleLogin}>
             <Text style={styles.exitBtnText}>Exit</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.nextBtn} onPress={createProfile}>
-            <Text style={styles.nextBtnText}>Next</Text>
+          <TouchableOpacity 
+            style={styles.nextBtn} 
+            onPress={handleSignUp}
+            disabled={isLoading}
+          >
+            {isLoading ? (
+              <ActivityIndicator color="#fff" size="small" />
+            ) : (
+              <Text style={styles.nextBtnText}>Next</Text>
+            )}
           </TouchableOpacity>
         </View>
 

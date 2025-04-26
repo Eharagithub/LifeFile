@@ -186,12 +186,6 @@ export default function WelcomeScreen() {
               <Text style={styles.loginButtonText}>Login to Your Account</Text>
             </TouchableOpacity>
 
-          
-            <Text style={styles.termsText}>
-              By continuing, you agree to our{' '}
-              <Text style={styles.linkText}>Terms</Text> &{' '}
-              <Text style={styles.linkText}>Privacy Policy</Text>
-            </Text>
           </View>
         </Animated.View>
       )}
@@ -199,7 +193,7 @@ export default function WelcomeScreen() {
   );
 }
 
-// const styles = StyleSheet.create({
+
 //   container: {
 //     flex: 1,
 //     backgroundColor: COLORS.background,

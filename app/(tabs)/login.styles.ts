@@ -15,6 +15,10 @@ export default StyleSheet.create({
   backButton: {
     alignSelf: "flex-start",
     marginBottom: 12,
+    position: "absolute",    
+    top: 24,                
+    left: 24,              
+    zIndex: 1,   
   },
   title: {
     fontSize: 20,

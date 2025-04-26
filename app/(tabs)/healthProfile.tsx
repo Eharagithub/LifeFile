@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, SafeAreaView, ScrollView, Image } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, SafeAreaView, ScrollView, Image, Alert, ActivityIndicator } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { Picker } from '@react-native-picker/picker';
 import styles from './signup.styles';
-import { useRouter } from 'expo-router';
+import { useRouter, useLocalSearchParams } from 'expo-router';
+import { db } from '../../config/firebaseConfig';
+import { doc, setDoc } from 'firebase/firestore';
 
-export default function MedicalProfile({ navigation }: any) {
+export default function MedicalProfile() {
   const router = useRouter();
+  const { userId } = useLocalSearchParams();
   const [weight, setWeight] = useState('');
   const [height, setHeight] = useState('');
   const [bmi, setBmi] = useState('');
@@ -20,19 +23,86 @@ export default function MedicalProfile({ navigation }: any) {
   const [diet, setDiet] = useState('');
   const [alcohol, setAlcohol] = useState<string | null>(null);
   const [hereditary, setHereditary] = useState('');
-  // Inside your component function
   const [agree, setAgree] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
-  // Dummy file picker
+  // Navigation functions
   const createProfile = () => {
-    router.push('/createProfile');
+    router.push({
+      pathname: '/createProfile',
+      params: { userId }
+    });
   };
-  const patientHome = () => {
-    router.push('/patientHome');
+  
+  const completeRegistration = async () => {
+    // Validate required fields
+    if (!weight || !height) {
+      Alert.alert('Error', 'Please fill in at least weight and height');
+      return;
+    }
+
+    if (!agree) {
+      Alert.alert('Error', 'Please agree to the terms and privacy policy');
+      return;
+    }
+
+    // Check userId
+    if (!userId) {
+      Alert.alert('Error', 'User ID is missing. Please sign up again.');
+      router.push('/signup');
+      return;
+    }
+
+    try {
+      setIsLoading(true);
+
+      // Create health profile data object
+      const healthData = {
+        weight,
+        height,
+        bmi: bmi || '',
+        bloodType: bloodType || '',
+        allergies: allergies || '',
+        chronicDiseases: chronic || '',
+        surgeries: surgeries || '',
+        medications: medications || '',
+        ongoingTreatments: treatments || '',
+        lifestyle: {
+          smoker: smoker || 'no',
+          dietaryPreference: diet || '',
+          alcoholConsumption: alcohol || 'no',
+          hereditaryConditions: hereditary || ''
+        },
+        termsAccepted: agree,
+        updatedAt: new Date().toISOString()
+      };
+
+      // Save to Firestore - update user document with health information
+      await setDoc(doc(db, "users", userId as string), 
+        { 
+          health: healthData,
+          registrationCompleted: true,
+          registrationCompletedAt: new Date().toISOString()
+        }, 
+        { merge: true }
+      );
+      
+      console.log('Health profile saved and registration completed for user:', userId);
+      
+      // Navigate to patient home page
+      router.push('/patientHome');
+    } catch (error: any) {
+      console.error('Error saving health profile:', error);
+      Alert.alert(
+        'Save Failed', 
+        'Failed to save your health information. Please try again.'
+      );
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-
-  // BMI calculation (optional, for demo)
+  // BMI calculation
   const handleBmi = () => {
     const w = parseFloat(weight);
     const h = parseFloat(height) / 100;
@@ -293,8 +363,12 @@ export default function MedicalProfile({ navigation }: any) {
           <TouchableOpacity style={styles.previousBtn} onPress={createProfile}>
             <Text style={styles.previousBtnText}>Previous</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.signUpButton} onPress={patientHome}>
-            <Text style={styles.nextBtnText}>Create Account</Text>
+          <TouchableOpacity style={styles.signUpButton} onPress={completeRegistration}>
+            {isLoading ? (
+              <ActivityIndicator size="small" color="#fff" />
+            ) : (
+              <Text style={styles.nextBtnText}>Create Account</Text>
+            )}
           </TouchableOpacity>
         </View>
       </ScrollView>
