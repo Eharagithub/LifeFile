@@ -1,5 +1,3 @@
-
-
 import { StyleSheet } from 'react-native';
 
 export default StyleSheet.create({
@@ -149,6 +147,9 @@ export default StyleSheet.create({
     color: '#222',
     height: 44,
     backgroundColor: 'transparent',
+    paddingVertical: 0,
+    
+
   },
   buttonRow: {
     flexDirection: 'row',
@@ -274,11 +275,86 @@ export default StyleSheet.create({
     backgroundColor: 'transparent',
   },
   datePickerButton: {
-    flexDirection: 'row',
+    padding: 10,
+    borderRadius: 5,
+    width: '48%',
     alignItems: 'center',
+  },
+  datePickerButtonRow: {
+    flexDirection: 'row',
     justifyContent: 'space-between',
     width: '100%',
+    marginTop: 10,
   },
+  cancelButton: {
+    backgroundColor: 'transparent',
+  },
+  confirmButton: {
+    backgroundColor: 'transparent',
+  },
+  cancelButtonText: {
+    color: '#7d4c9e',
+    fontWeight: 'bold',
+  },
+  confirmButtonText: {
+    color: '#7d4c9e',
+    fontWeight: 'bold',
+  },
+  
+  // Year picker modal styles
+  datePickerModal: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    // backgroundColor: 'rgba(0, 0, 0, 0.5)'
+    fontSize: 15,
+    color: '#222',
+    backgroundColor: 'transparent',
+  },
+  datePickerContainer: {
+    width: '80%',
+    height: '20%',
+    backgroundColor: '#f6f9f6',
+    borderColor: '#e9d6f7',
+    borderWidth: 1,
+    borderRadius: 8,
+    padding: 20,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  datePickerTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#bdbdbd',
+    marginBottom: 15,
+  },
+  yearPickerContainer: {
+    width: '100%',
+    height: 50,
+    marginBottom: -10,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+  },
+  yearItem: {
+    padding: 10,
+    alignItems: 'center',
+  },
+  yearText: {
+    fontSize: 20,
+    color: '#333',
+  },
+  selectedYearText: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    color: '#8A6FD0',
+  },
+
 
   //healthProfile.tsx
 

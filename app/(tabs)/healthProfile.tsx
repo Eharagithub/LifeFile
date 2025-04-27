@@ -236,12 +236,14 @@ export default function MedicalProfile() {
               editable={false}
             />
           </View>
+
+      
           <View style={{ flex: 1, marginLeft: 8 }}>
             <Text style={styles.inputLabel}>Blood Type</Text>
             <View style={styles.inputWrapper}>
               <Picker
                 selectedValue={bloodType}
-                style={styles.dropdown}
+                style={[styles.dropdown, { color: bloodType ? '#222' : '#bdbdbd' }]}
                 onValueChange={setBloodType}
                 dropdownIconColor="#bdbdbd"
               >
@@ -264,11 +266,11 @@ export default function MedicalProfile() {
         <View style={styles.inputWrapper}>
           <Picker
             selectedValue={allergies}
-            style={styles.dropdown}
+            style={[styles.dropdown, { color: allergies ? '#222' : '#bdbdbd' }]}
             onValueChange={setAllergies}
             dropdownIconColor="#bdbdbd"
           >
-            <Picker.Item label="Select gender" value="" color="#bdbdbd" />
+            <Picker.Item label="Select allergies" value="" color="#bdbdbd" />
             <Picker.Item label="None" value="none" />
             <Picker.Item label="Peanuts" value="peanuts" />
             <Picker.Item label="Penicillin" value="penicillin" />
@@ -281,11 +283,11 @@ export default function MedicalProfile() {
         <View style={styles.inputWrapper}>
           <Picker
             selectedValue={chronic}
-            style={styles.dropdown}
+            style={[styles.dropdown, { color: chronic ? '#222' : '#bdbdbd' }]}
             onValueChange={setChronic}
             dropdownIconColor="#bdbdbd"
           >
-            <Picker.Item label="Select gender" value="" color="#bdbdbd" />
+            <Picker.Item label="Select disease" value="" color="#bdbdbd" />
             <Picker.Item label="None" value="none" />
             <Picker.Item label="Diabetes" value="diabetes" />
             <Picker.Item label="Hypertension" value="hypertension" />

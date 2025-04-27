@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, TextInput, TouchableOpacity, SafeAreaView, ScrollView, Image, Platform, Alert, ActivityIndicator } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, SafeAreaView, ScrollView, Image, Platform, Alert, ActivityIndicator, Modal } from 'react-native';
 import { Feather, MaterialCommunityIcons } from '@expo/vector-icons';
 import { Picker } from '@react-native-picker/picker';
 import styles from './signup.styles';
@@ -21,6 +21,11 @@ export default function CreateProfile() {
     const [date, setDate] = useState(new Date());
     const [showDatePicker, setShowDatePicker] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+    
+    // New state variables for improved date picker
+    const [showYearPicker, setShowYearPicker] = useState(false);
+    const [selectedYear, setSelectedYear] = useState(new Date().getFullYear() - 30); // Default to 30 years ago
+    const [showMonthDayPicker, setShowMonthDayPicker] = useState(false);
 
     // Store the resetFormData function in a ref to avoid recreating it on each render
     const resetFormDataRef = useRef(() => {
@@ -133,24 +138,51 @@ export default function CreateProfile() {
 
     // Show date picker
     const showDatepicker = () => {
-        setShowDatePicker(true);
+        // Instead of showing DateTimePicker directly, show the year picker first
+        setShowYearPicker(true);
     };
 
-    // Handle date change
-    const onChangeDate = (event: DateTimePickerEvent, selectedDate?: Date) => {
-        const currentDate = selectedDate || date;
-        setShowDatePicker(Platform.OS === 'ios' ? true : false);
-        setDate(currentDate);
+    // Generate an array of years for the picker (100 years back from current year)
+    const getYears = () => {
+        const currentYear = new Date().getFullYear();
+        const years = [];
+        for (let i = currentYear; i >= currentYear - 100; i--) {
+            years.push(i);
+        }
+        return years;
+    };
 
+    // Handle year selection
+    const handleYearSelected = () => {
+        // Close year picker
+        setShowYearPicker(false);
+        
+        // Set the date to January 1st of the selected year
+        const newDate = new Date(date);
+        newDate.setFullYear(selectedYear);
+        setDate(newDate);
+        
+        // Now show the month/day picker
+        setShowMonthDayPicker(true);
+    };
+
+    // Handle date change from the month/day picker
+    const onChangeDate = (event: DateTimePickerEvent, selectedDate?: Date) => {
+        setShowMonthDayPicker(Platform.OS === 'ios' ? true : false);
+        
         if (event.type === 'dismissed') {
             return; // User canceled, don't update the date
         }
 
-        // Format date as DD/MM/YYYY
-        const day = String(currentDate.getDate()).padStart(2, '0');
-        const month = String(currentDate.getMonth() + 1).padStart(2, '0');
-        const year = currentDate.getFullYear();
-        setDob(`${day}/${month}/${year}`);
+        if (selectedDate) {
+            setDate(selectedDate);
+            
+            // Format date as DD/MM/YYYY
+            const day = String(selectedDate.getDate()).padStart(2, '0');
+            const month = String(selectedDate.getMonth() + 1).padStart(2, '0');
+            const year = selectedDate.getFullYear();
+            setDob(`${day}/${month}/${year}`);
+        }
     };
 
     return (
@@ -185,7 +217,9 @@ export default function CreateProfile() {
                 <View style={styles.sectionDivider} />
 
                 {/* Full Name */}
-                <Text style={styles.inputLabel}>Full Name</Text>
+                <Text style={styles.inputLabel}>
+                    Full Name <Text style={styles.req}> *</Text>
+                </Text>
                 <View style={styles.inputWrapper}>
                     <TextInput
                         style={styles.input}
@@ -215,16 +249,94 @@ export default function CreateProfile() {
                     <Feather name="chevron-down" size={18} color="#bdbdbd" />
                 </TouchableOpacity>
 
-                {/* Show the date picker when showDatePicker is true */}
-                {showDatePicker && (
-                    <DateTimePicker
-                        testID="dateTimePicker"
-                        value={date}
-                        mode="date"
-                        display="default"
-                        onChange={onChangeDate}
-                        maximumDate={new Date()} // Users can't select future dates
-                    />
+                {/* Show the year picker when showYearPicker is true */}
+                {showYearPicker && (
+                    <Modal transparent={true} animationType="fade" visible={showYearPicker}>
+                        <View style={styles.datePickerModal}>
+                            <View style={styles.datePickerContainer}>
+                                <Text style={styles.datePickerTitle}>Select Birth Year</Text>
+                                <View style={styles.yearPickerContainer}>
+                                    <Picker
+                                        selectedValue={selectedYear}
+                                        onValueChange={(itemValue) => setSelectedYear(itemValue)}
+                                        style={{ width: '100%' }}
+                                    >
+                                        {getYears().map((year) => (
+                                            <Picker.Item key={year} label={String(year)} value={year} />
+                                        ))}
+                                    </Picker>
+                                </View>
+                                <View style={styles.datePickerButtonRow}>
+                                    <TouchableOpacity 
+                                        style={[styles.datePickerButton, styles.cancelButton]}
+                                        onPress={() => setShowYearPicker(false)}
+                                    >
+                                        <Text style={styles.cancelButtonText}>Cancel</Text>
+                                    </TouchableOpacity>
+                                    <TouchableOpacity 
+                                        style={[styles.datePickerButton, styles.confirmButton]}
+                                        onPress={handleYearSelected}
+                                    >
+                                        <Text style={styles.confirmButtonText}>Next</Text>
+                                    </TouchableOpacity>
+                                </View>
+                            </View>
+                        </View>
+                    </Modal>
+                )}
+
+                {/* Show the month/day picker when showMonthDayPicker is true */}
+                {showMonthDayPicker && (
+                    Platform.OS === 'ios' ? (
+                        <Modal transparent={true} animationType="fade" visible={showMonthDayPicker}>
+                            <View style={styles.datePickerModal}>
+                                <View style={styles.datePickerContainer}>
+                                    <Text style={styles.datePickerTitle}>Select Month and Day</Text>
+                                    <DateTimePicker
+                                        testID="dateTimePicker"
+                                        value={date}
+                                        mode="date"
+                                        display="spinner"
+                                        onChange={onChangeDate}
+                                        maximumDate={new Date()}
+                                    />
+                                    <View style={styles.datePickerButtonRow}>
+                                        <TouchableOpacity 
+                                            style={[styles.datePickerButton, styles.cancelButton]}
+                                            onPress={() => {
+                                                setShowMonthDayPicker(false);
+                                                setShowYearPicker(true); // Go back to year selection
+                                            }}
+                                        >
+                                            <Text style={styles.cancelButtonText}>Back</Text>
+                                        </TouchableOpacity>
+                                        <TouchableOpacity 
+                                            style={[styles.datePickerButton, styles.confirmButton]}
+                                            onPress={() => {
+                                                // Format date as DD/MM/YYYY
+                                                const day = String(date.getDate()).padStart(2, '0');
+                                                const month = String(date.getMonth() + 1).padStart(2, '0');
+                                                const year = date.getFullYear();
+                                                setDob(`${day}/${month}/${year}`);
+                                                setShowMonthDayPicker(false);
+                                            }}
+                                        >
+                                            <Text style={styles.confirmButtonText}>Confirm</Text>
+                                        </TouchableOpacity>
+                                    </View>
+                                </View>
+                            </View>
+                        </Modal>
+                    ) : (
+                        <DateTimePicker
+                            testID="dateTimePicker"
+                            value={date}
+                            mode="date"
+                            display="default"
+                            onChange={onChangeDate}
+                            maximumDate={new Date()} // Users can't select future dates
+                        />
+                    )
                 )}
 
                 {/* NIC */}
@@ -246,6 +358,7 @@ export default function CreateProfile() {
                     Gender <Text style={styles.req}>*</Text>
                 </Text>
                 <View style={styles.inputWrapper}>
+                    
                     <Picker
                         selectedValue={gender}
                         style={[styles.dropdown, !gender ? { color: '#bdbdbd' } : { color: '#222' }]}
