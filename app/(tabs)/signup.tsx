@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { View, Text, TextInput, TouchableOpacity, SafeAreaView, ScrollView, Image, Alert, ActivityIndicator } from 'react-native';
 import { Feather, MaterialCommunityIcons } from '@expo/vector-icons';
 import styles from './signup.styles';
@@ -14,24 +14,58 @@ export default function SignUp() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  // Add state to store the user ID
   const [userId, setUserId] = useState('');
+
+  // Store the resetFormData function in a ref to avoid recreating it on each render
+  const resetFormDataRef = useRef(() => {
+    console.log("SignUp: Resetting form data");
+    setEmail('');
+    setPassword('');
+    setConfirm('');
+    setShowPassword(false);
+    setShowConfirm(false);
+    setUserId('');
+  });
+
+  // Register and clean up event listener in a single useEffect
+  useEffect(() => {
+    // Get a stable reference to the callback
+    const resetFormData = resetFormDataRef.current;
+    
+    if (global.EventEmitter) {
+      console.log("SignUp: Registering USER_CHANGED listener");
+      global.EventEmitter.on('USER_CHANGED', resetFormData);
+      global.EventEmitter.debug();
+    } else {
+      console.warn("SignUp: EventEmitter not available");
+    }
+
+    return () => {
+      if (global.EventEmitter) {
+        console.log("SignUp: Cleaning up USER_CHANGED listener");
+        global.EventEmitter.off('USER_CHANGED', resetFormData);
+      }
+    };
+  }, []); // Empty dependency array ensures this runs once on mount
+
+  // Reset form data when component mounts
+  useEffect(() => {
+    console.log("SignUp: Component mounted, resetting form");
+    resetFormDataRef.current();
+  }, []);
 
   const handleLogin = () => {
     router.push('/login');
   };
 
   const createProfile = (uid: string) => {
-    // Fixed navigation path - use the full path including the tabs directory structure
     router.push({
-      pathname: './createProfile',
+      pathname: '/createProfile',
       params: { userId: uid }
     });
   };
- 
 
   const handleSignUp = async () => {
-    // Input validation
     if (!email || !password || !confirm) {
       Alert.alert('Error', 'Please fill in all required fields');
       return;
@@ -47,7 +81,6 @@ export default function SignUp() {
       return;
     }
 
-    // Email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       Alert.alert('Error', 'Please enter a valid email address');
@@ -60,7 +93,6 @@ export default function SignUp() {
       const uid = userCredential.user.uid;
       console.log('User created with ID:', uid);
       
-      // Set user ID and navigate to the next step
       setUserId(uid);
       createProfile(uid);
     } catch (error: any) {
@@ -77,11 +109,10 @@ export default function SignUp() {
   return (
     <SafeAreaView style={styles.safe}>
       <ScrollView contentContainerStyle={styles.container}>
-        {/* Logo and Steps */}
-         <View style={styles.logoContainer}>
-            <Image source={require('../../assets/images/logo.png')}
-                   style={styles.heartIcon}
-                   resizeMode="contain"/>
+        <View style={styles.logoContainer}>
+          <Image source={require('../../assets/images/logo.png')}
+                 style={styles.heartIcon}
+                 resizeMode="contain"/>
         </View>
 
         <View style={styles.stepsRow}>
@@ -97,14 +128,12 @@ export default function SignUp() {
           <Text style={styles.stepLabel}>Health</Text>
         </View>
 
-        {/* Section Title */}
         <View style={styles.sectionTitleRow}>
           <MaterialCommunityIcons name="checkbox-blank-outline" size={18} color="#222" />
           <Text style={styles.sectionTitle}> Create your Account</Text>
         </View>
 
         <View style={styles.sectionDivider} />
-        {/* Email */}
         <Text style={styles.inputLabel}>
           Email (Will be the User Name)<Text style={styles.req}>*</Text>
         </Text>
@@ -121,7 +150,6 @@ export default function SignUp() {
           />
         </View>
 
-        {/* Password */}
         <Text style={styles.inputLabel}>
           Password <Text style={styles.req}>*</Text>
         </Text>
@@ -141,7 +169,6 @@ export default function SignUp() {
           </TouchableOpacity>
         </View>
 
-        {/* Confirm Password */}
         <Text style={styles.inputLabel}>
           Confirm Password<Text style={styles.req}>*</Text>
         </Text>
@@ -161,7 +188,6 @@ export default function SignUp() {
           </TouchableOpacity>
         </View>
 
-        {/* Buttons */}
         <View style={styles.buttonRow}>
           <TouchableOpacity style={styles.exitBtn} onPress={handleLogin}>
             <Text style={styles.exitBtnText}>Exit</Text>
@@ -179,7 +205,6 @@ export default function SignUp() {
           </TouchableOpacity>
         </View>
 
-        {/* Login Link */}
         <View style={styles.loginRow}>
           <Text style={styles.loginText}>Already have an account? </Text>
           <TouchableOpacity onPress={handleLogin}>

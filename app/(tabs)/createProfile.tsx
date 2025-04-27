@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { View, Text, TextInput, TouchableOpacity, SafeAreaView, ScrollView, Image, Platform, Alert, ActivityIndicator } from 'react-native';
 import { Feather, MaterialCommunityIcons } from '@expo/vector-icons';
 import { Picker } from '@react-native-picker/picker';
@@ -21,6 +21,50 @@ export default function CreateProfile() {
     const [date, setDate] = useState(new Date());
     const [showDatePicker, setShowDatePicker] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+
+    // Store the resetFormData function in a ref to avoid recreating it on each render
+    const resetFormDataRef = useRef(() => {
+        console.log("CreateProfile: Resetting form data");
+        setFullName('');
+        setDob('');
+        setNic('');
+        setGender('');
+        setAddress('');
+        setContact('');
+        setFileName('No file chosen');
+        setDate(new Date());
+        setShowDatePicker(false);
+    });
+
+    // Register and clean up event listener in a single useEffect
+    useEffect(() => {
+        // Get a stable reference to the callback
+        const resetFormData = resetFormDataRef.current;
+        
+        if (global.EventEmitter) {
+            console.log("CreateProfile: Registering USER_CHANGED listener");
+            global.EventEmitter.on('USER_CHANGED', resetFormData);
+            
+            // Debug: log current listeners
+            global.EventEmitter.debug();
+        } else {
+            console.warn("CreateProfile: EventEmitter not available");
+        }
+
+        // Clean up listener when component unmounts
+        return () => {
+            if (global.EventEmitter) {
+                console.log("CreateProfile: Cleaning up USER_CHANGED listener");
+                global.EventEmitter.off('USER_CHANGED', resetFormData);
+            }
+        };
+    }, []); // Empty dependency array ensures this runs once on mount
+
+    // Force reset form data when component mounts or userId changes
+    useEffect(() => {
+        console.log("CreateProfile: New userId detected, resetting form");
+        resetFormDataRef.current();
+    }, [userId]);
 
     // Dummy file picker
     const handleChooseFile = () => {

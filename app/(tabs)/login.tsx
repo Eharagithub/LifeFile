@@ -38,7 +38,13 @@ export default function LoginScreen() {
       setIsLoading(true);
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       console.log("User signed in:", userCredential.user.uid);
-      router.push('/patientHome');
+      
+      // Clear local storage to remove any cached form data
+      // This helps ensure that previously entered data doesn't appear for the new user
+      clearFormData();
+      
+      // Navigate to home page
+      router.replace('/patientHome');
     } catch (error: any) {
       console.error("Login error:", error);
       
@@ -77,6 +83,19 @@ export default function LoginScreen() {
       );
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  // Function to clear any cached form data
+  const clearFormData = () => {
+    // Reset state in this component
+    setEmail("");
+    setPassword("");
+    
+    // We'll create a global event to notify other components to reset their state
+    // This is a simple approach - in a production app you might use a state management library
+    if (global.EventEmitter) {
+      global.EventEmitter.emit('USER_CHANGED');
     }
   };
 

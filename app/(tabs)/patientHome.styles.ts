@@ -147,4 +147,21 @@ export default StyleSheet.create({
     padding: 4,
     alignSelf: 'flex-start',
   },
+  // Sign Out Button
+  signOutButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    position: 'absolute',
+    top: 10,
+    right: 20,
+    padding: 8,
+    borderRadius: 8,
+    backgroundColor: 'rgba(125, 76, 158, 0.1)',
+  },
+  signOutText: {
+    marginLeft: 5,
+    color: '#7d4c9e',
+    fontWeight: '500',
+    fontSize: 12,
+  },
 });

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { View, Text, TextInput, TouchableOpacity, SafeAreaView, ScrollView, Image, Alert, ActivityIndicator } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { Picker } from '@react-native-picker/picker';
@@ -25,6 +25,56 @@ export default function MedicalProfile() {
   const [hereditary, setHereditary] = useState('');
   const [agree, setAgree] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  
+  // Store the resetFormData function in a ref to avoid recreating it on each render
+  const resetFormDataRef = useRef(() => {
+    console.log("HealthProfile: Resetting form data");
+    setWeight('');
+    setHeight('');
+    setBmi('');
+    setBloodType('');
+    setAllergies('');
+    setChronic('');
+    setSurgeries('');
+    setMedications('');
+    setTreatments('');
+    setSmoker(null);
+    setDiet('');
+    setAlcohol(null);
+    setHereditary('');
+    setAgree(false);
+  });
+
+  // Register and clean up the event listener in a single useEffect
+  useEffect(() => {
+    // Get a stable reference to the callback
+    const resetFormData = resetFormDataRef.current;
+    
+    if (global.EventEmitter) {
+      console.log("HealthProfile: Registering USER_CHANGED listener");
+      // Register the listener with a stable function reference
+      global.EventEmitter.on('USER_CHANGED', resetFormData);
+      
+      // Debug: log current listeners
+      global.EventEmitter.debug();
+    } else {
+      console.warn("HealthProfile: EventEmitter not available");
+    }
+
+    // Clean up listener when component unmounts
+    return () => {
+      if (global.EventEmitter) {
+        console.log("HealthProfile: Cleaning up USER_CHANGED listener");
+        global.EventEmitter.off('USER_CHANGED', resetFormData);
+      }
+    };
+  }, []); // Empty dependency array ensures this runs once on mount
+
+  // Force reset form data when component mounts or userId changes
+  useEffect(() => {
+    console.log("HealthProfile: New userId detected, resetting form");
+    resetFormDataRef.current();
+  }, [userId]);
 
   // Navigation functions
   const createProfile = () => {

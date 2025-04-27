@@ -1,9 +1,11 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, Image, TouchableOpacity, SafeAreaView, ScrollView, FlatList } from 'react-native';
+import { View, Text, TextInput, Image, TouchableOpacity, SafeAreaView, ScrollView, FlatList, Alert } from 'react-native';
 import { Feather, FontAwesome, MaterialCommunityIcons, Ionicons } from '@expo/vector-icons';
 import styles from './patientHome.styles';
 import BottomNavigation from './BottomNavigation';
-
+import { useRouter } from 'expo-router';
+import { auth } from '../../config/firebaseConfig';
+import { signOut } from 'firebase/auth';
 
 interface ArticleItem {
   id: string;
@@ -15,6 +17,7 @@ interface ArticleItem {
 }
 
 export default function PatientHome() {
+  const router = useRouter();
   const articles: ArticleItem[] = [
     {
       id: '1',
@@ -41,6 +44,31 @@ export default function PatientHome() {
       bookmarked: false
     }
   ];
+
+  // Handle user sign out
+  const handleSignOut = async () => {
+    try {
+      await signOut(auth);
+      
+      // Trigger the USER_CHANGED event to clear form data across the app
+      if (global.EventEmitter) {
+        console.log("PatientHome: Emitting USER_CHANGED event for sign out");
+        global.EventEmitter.emit('USER_CHANGED');
+        // Debug to confirm listeners were notified
+        global.EventEmitter.debug();
+      } else {
+        console.warn("PatientHome: EventEmitter not available for sign out");
+      }
+      
+      // Navigate back to login screen with replace to prevent going back
+      setTimeout(() => {
+        router.replace('/login');
+      }, 100);
+    } catch (error) {
+      console.error('Error signing out:', error);
+      Alert.alert('Sign Out Error', 'Failed to sign out. Please try again.');
+    }
+  };
 
   const renderArticleItem = ({ item }: { item: ArticleItem }) => (
     <View style={styles.articleItem}>
@@ -74,6 +102,15 @@ export default function PatientHome() {
             <Text style={styles.welcomeSubtitle}>How is it going today ?</Text>
           </View>
         </View>
+        
+        {/* Sign Out Button */}
+        <TouchableOpacity 
+          style={styles.signOutButton} 
+          onPress={handleSignOut}
+        >
+          <Feather name="log-out" size={16} color="#7d4c9e" />
+          <Text style={styles.signOutText}>Sign Out</Text>
+        </TouchableOpacity>
         
         {/* Search Bar */}
         <View style={styles.searchContainer}>
