@@ -1,11 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text, TextInput, Image, TouchableOpacity, SafeAreaView, ScrollView, FlatList, Alert } from 'react-native';
 import { Feather, FontAwesome, MaterialCommunityIcons, Ionicons } from '@expo/vector-icons';
 import styles from './patientHome.styles';
 import BottomNavigation from './BottomNavigation';
 import { useRouter } from 'expo-router';
-import { auth } from '../../config/firebaseConfig';
+import { auth, db } from '../../config/firebaseConfig';
 import { signOut } from 'firebase/auth';
+import { doc, getDoc } from 'firebase/firestore';
 
 interface ArticleItem {
   id: string;
@@ -16,8 +17,23 @@ interface ArticleItem {
   bookmarked: boolean;
 }
 
+interface UserProfile {
+  fullName: string;
+  firstName: string;
+  lastName: string;
+  profilePicture: string;
+}
+
 export default function PatientHome() {
   const router = useRouter();
+  const [userProfile, setUserProfile] = useState<UserProfile>({
+    fullName: '',
+    firstName: '',
+    lastName: '',
+    profilePicture: ''
+  });
+  const [loading, setLoading] = useState(true);
+  
   const articles: ArticleItem[] = [
     {
       id: '1',
@@ -44,6 +60,81 @@ export default function PatientHome() {
       bookmarked: false
     }
   ];
+
+  // Fetch user profile data
+  useEffect(() => {
+    const fetchUserProfile = async () => {
+      try {
+        const currentUser = auth.currentUser;
+        if (!currentUser) {
+          console.log("No user is signed in");
+          router.replace('/login');
+          return;
+        }
+
+        console.log("Fetching profile for user ID:", currentUser.uid);
+        const userId = currentUser.uid;
+        const userDocRef = doc(db, "users", userId);
+        const userDocSnap = await getDoc(userDocRef);
+        
+        if (userDocSnap.exists()) {
+          console.log("User document found:", userDocSnap.id);
+          const userData = userDocSnap.data();
+          const personalData = userData.personal || {};
+          
+          // Log personal data to debug
+          console.log("Personal data retrieved:", personalData);
+          
+          const fullName = personalData.fullName || 'Guest';
+          
+          // Split full name into first name and last name
+          const nameParts = fullName.trim().split(' ');
+          const firstName = nameParts[0] || '';
+          const lastName = nameParts.length > 1 ? nameParts[nameParts.length - 1] : '';
+          
+          setUserProfile({
+            fullName,
+            firstName,
+            lastName,
+            profilePicture: personalData.profilePicture || ''
+          });
+          
+          console.log(`User profile set: ${firstName} ${lastName}`);
+        } else {
+          console.log("No user document found for ID:", userId);
+          // Handle the case when user document doesn't exist
+          setUserProfile({
+            fullName: 'Guest User',
+            firstName: 'Guest',
+            lastName: 'User',
+            profilePicture: ''
+          });
+        }
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+        // Set default values on error
+        setUserProfile({
+          fullName: 'Guest User',
+          firstName: 'Guest',
+          lastName: 'User',
+          profilePicture: ''
+        });
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    fetchUserProfile();
+    
+    // Add an auth state change listener to refresh profile when user changes
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      if (user) {
+        fetchUserProfile();
+      }
+    });
+    
+    return () => unsubscribe();
+  }, []);
 
   // Handle user sign out
   const handleSignOut = async () => {
@@ -92,13 +183,21 @@ export default function PatientHome() {
       {/* Header Section */}
       <View style={styles.header}>
         <View style={styles.profileSection}>
-          <Image 
-            source={require('../../assets/images/profile.jpg')} 
-            style={styles.profileImage} 
-          />
+          {userProfile.profilePicture ? (
+            <Image 
+              source={{ uri: userProfile.profilePicture }} 
+              style={styles.profileImage} 
+              defaultSource={require('../../assets/images/profile.jpg')}
+            />
+          ) : (
+            <Image 
+              source={require('../../assets/images/profile.jpg')} 
+              style={styles.profileImage} 
+            />
+          )}
           <View style={styles.welcomeText}>
             <Text style={styles.welcomeTitle}>welcome !</Text>
-            <Text style={styles.userName}>Ruchita</Text>
+            <Text style={styles.userName}>{userProfile.firstName || 'User'}</Text>
             <Text style={styles.welcomeSubtitle}>How is it going today ?</Text>
           </View>
         </View>
